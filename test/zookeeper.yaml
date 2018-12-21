@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: zk-svc
-  namespace: monitor
+  namespace: test
   labels:
     app: zk-svc
 spec:
@@ -20,7 +20,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: zk-cm
-  namespace: monitor
+  namespace: test
 data:
   jvm.heap: "1G"
   tick: "2000"
@@ -34,7 +34,7 @@ apiVersion: policy/v1beta1
 kind: PodDisruptionBudget
 metadata:
   name: zk-pdb
-  namespace: monitor
+  namespace: test
 spec:
   selector:
     matchLabels:
@@ -45,7 +45,7 @@ apiVersion: apps/v1beta1
 kind: StatefulSet
 metadata:
   name: zk
-  namespace: monitor
+  namespace: test
 spec:
   serviceName: zk-svc
   replicas: 3
@@ -142,16 +142,16 @@ spec:
             - "zkOk.sh"
           initialDelaySeconds: 10
           timeoutSeconds: 5
-        volumeMounts:
-        - name: datadir
-          mountPath: /var/lib/zookeeper/data
+#        volumeMounts:
+#        - name: datadir
+#          mountPath: /var/lib/zookeeper/data
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
-      volumes:
-      - name: datadir
-        hostPath:
-          path: /opt/zookeeper/data
+#      volumes:
+#      - name: datadir
+#        hostPath:
+#          path: /opt/zookeeper/data
 #  volumeClaimTemplates:
 #  - metadata:
 #      name: datadir
