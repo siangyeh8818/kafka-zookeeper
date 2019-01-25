@@ -3,7 +3,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: kafka-svc
-  namespace: monitor
+  namespace: test
   labels:
     app: kafka
 spec:
@@ -18,7 +18,7 @@ kind: StatefulSet
 apiVersion: apps/v1beta1
 metadata:
   name: kafka
-  namespace: monitor
+  namespace: test
 spec:
   serviceName: kafka-svc
   replicas: 3
@@ -51,12 +51,12 @@ spec:
       terminationGracePeriodSeconds: 300
       containers:
       - name: kafka
-        image: siangyeh8818/kafka:test-14
+        image: siangyeh8818/kafka:test-15
         ports:
         - containerPort: 9092
         env:
         - name: ZOOKEEPER
-          value: "zk-0.zk-svc.monitor.svc.cluster.local:2181,zk-1.zk-svc.monitor.svc.cluster.local:2181,zk-2.zk-svc.monitor.svc.cluster.local:2181"
+          value: "zk-0.zk-svc.test.svc.cluster.local:2181,zk-1.zk-svc.test.svc.cluster.local:2181,zk-2.zk-svc.test.svc.cluster.local:2181"
         - name: KAFKA_ADVERTISED_PORT
           value: "9092"
  #       - name: KAFKA_ADVERTISED_LISTENERS
@@ -85,7 +85,7 @@ spec:
       volumes:
       - name: log
         hostPath:
-          path: /opt/kafka
+          path: /opt/siang/kafka
 ---
 apiVersion: v1
 kind: Service
