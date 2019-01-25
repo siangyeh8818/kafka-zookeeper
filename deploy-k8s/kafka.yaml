@@ -49,9 +49,17 @@ spec:
                         - zk
                  topologyKey: "kubernetes.io/hostname"
       terminationGracePeriodSeconds: 300
+      initContainers:
+      - name: init-myservice
+        image: dockerhub.pentium.network/master/busybox:latest
+        # use service port not container port
+        command: ['sh', '-c', 'until nc -v -z -w 1 zk-2.zk-svc.monitor.svc.cluster.local 2181 ; do echo waiting for myservice; sleep 2; done;']
+      - name: sleepforit
+        image: dockerhub.pentium.network/master/busybox:latest
+        command: ['sh', '-c', 'sleep 5s']
       containers:
       - name: kafka
-        image: siangyeh8818/kafka:test-14
+        image: siangyeh8818/kafka:release-1.1
         ports:
         - containerPort: 9092
         env:
@@ -59,10 +67,6 @@ spec:
           value: "zk-0.zk-svc.monitor.svc.cluster.local:2181,zk-1.zk-svc.monitor.svc.cluster.local:2181,zk-2.zk-svc.monitor.svc.cluster.local:2181"
         - name: KAFKA_ADVERTISED_PORT
           value: "9092"
- #       - name: KAFKA_ADVERTISED_LISTENERS
- #         value: "kafka-0.kafka-svc.test.svc.cluster.local"
- #       - name: INTERNAL_LISTENERS
- #         value: "kafka-0.kafka-svc.test.svc.cluster.local"
         - name: MY_POD_NAME
           valueFrom:
             fieldRef:
@@ -86,6 +90,8 @@ spec:
       - name: log
         hostPath:
           path: /opt/kafka
+  updateStrategy:
+    type: RollingUpdate
 ---
 apiVersion: v1
 kind: Service

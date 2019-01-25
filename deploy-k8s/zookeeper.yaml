@@ -152,6 +152,8 @@ spec:
       - name: datadir
         hostPath:
           path: /opt/zookeeper/data
+  updateStrategy:
+    type: RollingUpdate
 #  volumeClaimTemplates:
 #  - metadata:
 #      name: datadir
