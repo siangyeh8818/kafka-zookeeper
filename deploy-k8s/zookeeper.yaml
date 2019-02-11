@@ -12,6 +12,8 @@ spec:
     name: server
   - port: 3888
     name: leader-election
+  - port: 9141
+    name: zookeeper-exporter
   clusterIP: None
   selector:
     app: zk
@@ -145,6 +147,16 @@ spec:
         volumeMounts:
         - name: datadir
           mountPath: /var/lib/zookeeper/data
+      - name: zookeeper-exporter
+        image: carlpett/zookeeper_exporter:v1.0.2
+        command:
+          - "/zookeeper_exporter"
+          - "-zookeeper"
+          - "localhost:2181"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9141
+          protocol: TCP
       securityContext:
         runAsUser: 1000
         fsGroup: 1000
@@ -162,3 +174,4 @@ spec:
 #      resources:
 #        requests:
 #          storage: 10Gi
+

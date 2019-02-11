@@ -76,7 +76,7 @@ spec:
             fieldRef:
               fieldPath: metadata.namespace
         - name: PARTITION_NUMBER
-          value: "3"
+          value: "1"
         - name: LOGRETENTION
           value: "1"
         volumeMounts:
