@@ -30,7 +30,8 @@ if [ "x$KAFKA_HEAP_OPTS" = "x" ]; then
 fi
 
 EXTRA_ARGS=${EXTRA_ARGS-'-name kafkaServer -loggc'}
-
+#export JMX_PORT=${JMX_PORT:-9999}
+export PROMETHEUS_PORT=${PROMETHEUS_PORT:-7072}
 COMMAND=$1
 case $COMMAND in
   -daemon)
@@ -41,4 +42,6 @@ case $COMMAND in
     ;;
 esac
 
-exec $base_dir/kafka-run-class.sh $EXTRA_ARGS kafka.Kafka "$@"
+
+
+exec $base_dir/kafka-run-class.sh $EXTRA_ARGS -javaagent:/kafka_2.12-2.1.0/libs/jmx_prometheus_javaagent-0.11.0.jar=$PROMETHEUS_PORT:/kafka_2.12-2.1.0/config/kafka-agent.yml kafka.Kafka "$@"
