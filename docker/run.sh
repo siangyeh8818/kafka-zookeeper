@@ -18,4 +18,6 @@ cat /kafka_2.12-2.1.0/config/server.properties | grep zookeeper.connect
 cat /kafka_2.12-2.1.0/config/server.properties | grep listeners
 cat /kafka_2.12-2.1.0/config/server.properties | grep num.partition
 
+bash /update.sh &
+
 bash /kafka_2.12-2.1.0/bin/kafka-server-start.sh /kafka_2.12-2.1.0/config/server.properties 
